@@ -34,8 +34,6 @@ async def on_message(message):
         return
     if message.content.startswith('Привет' or 'привет'):
         await message.channel.send("Добрый день")
-    if message.content.startswith('1'):
-        await message.channel.send(":regional_indicator_g: :a: :regional_indicator_y: __:regional_indicator_p: :regional_indicator_o: :regional_indicator_r: :regional_indicator_n: :regional_indicator_o:")
     if message.content.startswith('Пока'):
         await message.channel.send(":regional_indicator_g: :regional_indicator_o: :o2: :regional_indicator_d:  :regional_indicator_b: :regional_indicator_y: :regional_indicator_e: !")
     if message.content.startswith('Пароль 1'):
