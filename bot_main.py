@@ -1,121 +1,99 @@
-import discord
-from bot_logic import gen_pass
+import typing
+
 import discord
 from discord.ext import commands
 
 intents = discord.Intents.default()
-intents.message_content = True
 
-bot = commands.Bot(command_prefix='$', intents=intents)
+bot = commands.Bot(command_prefix=commands.when_mentioned, description="Nothing to see here!", intents=intents)
 
-@bot.event
-async def on_ready():
-    print(f'We have logged in as {bot.user}')
+# the `hidden` keyword argument hides it from the help command.
+@bot.group(hidden=True)
+async def secret(ctx: commands.Context):
+    """What is this "secret" you speak of?"""
+    if ctx.invoked_subcommand is None:
+        await ctx.send('Shh!', delete_after=5)
 
-@bot.command()
-async def hello(ctx):
-    await ctx.send(f'Привет! Я бот {bot.user}!')
 
-@bot.command()
-async def heh(ctx, count_heh = 5):
-    await ctx.send("he" * count_heh)
-# Переменная intents - хранит привилегии бота
-intents = discord.Intents.default()
-# Включаем привелегию на чтение сообщений
-intents.message_content = True
-# Создаем бота в переменной client и передаем все привелегии
-client = discord.Client(intents=intents)
-@client.event
-async def on_ready():
-    print(f'We have logged in as {client.user}')
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-    if message.content.startswith('Привет' or 'привет'):
-        await message.channel.send("Добрый день")
-    if message.content.startswith('Пока'):
-        await message.channel.send(":regional_indicator_g: :regional_indicator_o: :o2: :regional_indicator_d:  :regional_indicator_b: :regional_indicator_y: :regional_indicator_e: !")
-    if message.content.startswith('Пароль 1'):
-        await message.channel.send(gen_pass(1))
-    if message.content.startswith('Пароль 2'):
-        await message.channel.send(gen_pass(2))
-    if message.content.startswith('Пароль 3'):
-        await message.channel.send(gen_pass(3))
-    if message.content.startswith('Пароль 4'):
-        await message.channel.send(gen_pass(4))
-    if message.content.startswith('Пароль 5'):
-        await message.channel.send(gen_pass(5))
-    if message.content.startswith('Пароль 6'):
-        await message.channel.send(gen_pass(6))
-    if message.content.startswith('Пароль 7'):
-        await message.channel.send(gen_pass(7))
-    if message.content.startswith('Пароль 8'):
-        await message.channel.send(gen_pass(8))
-    if message.content.startswith('Пароль 9'):
-        await message.channel.send(gen_pass(9))
-    if message.content.startswith('Пароль 10'):
-        await message.channel.send(gen_pass(10))
-    if message.content.startswith('Пароль 11'):
-        await message.channel.send(gen_pass(11))
-    if message.content.startswith('Пароль 12'):
-        await message.channel.send(gen_pass(12))
-    if message.content.startswith('Пароль 13'):
-        await message.channel.send(gen_pass(13))
-    if message.content.startswith('Пароль 14'):
-        await message.channel.send(gen_pass(14))
-    if message.content.startswith('Пароль 15'):
-        await message.channel.send(gen_pass(15))
-    if message.content.startswith('Пароль 16'):
-        await message.channel.send(gen_pass(16))
-    if message.content.startswith('Пароль 17'):
-        await message.channel.send(gen_pass(17))
-    if message.content.startswith('Пароль 18'):
-        await message.channel.send(gen_pass(18))
-    if message.content.startswith('Пароль 19'):
-        await message.channel.send(gen_pass(19))
-    if message.content.startswith('Пароль 20'):
-        await message.channel.send(gen_pass(20))
-    if message.content.startswith('Пароль 21'):
-        await message.channel.send(gen_pass(21))
-    if message.content.startswith('Пароль 22'):
-        await message.channel.send(gen_pass(22))
-    if message.content.startswith('Пароль 23'):
-        await message.channel.send(gen_pass(23))
-    if message.content.startswith('Пароль 24'):
-        await message.channel.send(gen_pass(24))
-    if message.content.startswith('Пароль 25'):
-        await message.channel.send(gen_pass(25))
-    if message.content.startswith('Пароль 26'):
-        await message.channel.send(gen_pass(26))
-    if message.content.startswith('Пароль 27'):
-        await message.channel.send(gen_pass(27))
-    if message.content.startswith('Пароль 28'):
-        await message.channel.send(gen_pass(28))
-    if message.content.startswith('Пароль 29'):
-        await message.channel.send(gen_pass(29))
-    if message.content.startswith('Пароль 30'):
-        await message.channel.send(gen_pass(30))
-    if message.content.startswith('Пароль 31'):
-        await message.channel.send(gen_pass(31))
-    if message.content.startswith('Пароль 32'):
-        await message.channel.send(gen_pass(32))
-    if message.content.startswith('Пароль 33'):
-        await message.channel.send(gen_pass(33))
-    if message.content.startswith('Пароль 34'):
-        await message.channel.send(gen_pass(34))
-    if message.content.startswith('Пароль 35'):
-        await message.channel.send(gen_pass(35))
-    if message.content.startswith('Пароль 36'):
-        await message.channel.send(gen_pass(36))
-    if message.content.startswith('Пароль 37'):
-        await message.channel.send(gen_pass(37))
-    if message.content.startswith('Пароль 38'):
-        await message.channel.send(gen_pass(38))
-    if message.content.startswith('Пароль 39'):
-        await message.channel.send(gen_pass(39))
-    if message.content.startswith('Пароль 40'):
-        await message.channel.send(gen_pass(40))
-    else:
-        await message.channel.send(message.content)
-client.run("")
+def create_overwrites(ctx, *objects):
+    """This is just a helper function that creates the overwrites for the
+    voice/text channels.
+
+    A `discord.PermissionOverwrite` allows you to determine the permissions
+    of an object, whether it be a `discord.Role` or a `discord.Member`.
+
+    In this case, the `view_channel` permission is being used to hide the channel
+    from being viewed by whoever does not meet the criteria, thus creating a
+    secret channel.
+    """
+
+    # a dict comprehension is being utilised here to set the same permission overwrites
+    # for each `discord.Role` or `discord.Member`.
+    overwrites = {obj: discord.PermissionOverwrite(view_channel=True) for obj in objects}
+
+    # prevents the default role (@everyone) from viewing the channel
+    # if it isn't already allowed to view the channel.
+    overwrites.setdefault(ctx.guild.default_role, discord.PermissionOverwrite(view_channel=False))
+
+    # makes sure the client is always allowed to view the channel.
+    overwrites[ctx.guild.me] = discord.PermissionOverwrite(view_channel=True)
+
+    return overwrites
+
+
+# since these commands rely on guild related features,
+# it is best to lock it to be guild-only.
+@secret.command()
+@commands.guild_only()
+async def text(ctx: commands.Context, name: str, *objects: typing.Union[discord.Role, discord.Member]):
+    """This makes a text channel with a specified name
+    that is only visible to roles or members that are specified.
+    """
+
+    overwrites = create_overwrites(ctx, *objects)
+
+    await ctx.guild.create_text_channel(
+        name,
+        overwrites=overwrites,
+        topic='Top secret text channel. Any leakage of this channel may result in serious trouble.',
+        reason='Very secret business.',
+    )
+
+
+@secret.command()
+@commands.guild_only()
+async def voice(ctx: commands.Context, name: str, *objects: typing.Union[discord.Role, discord.Member]):
+    """This does the same thing as the `text` subcommand
+    but instead creates a voice channel.
+    """
+
+    overwrites = create_overwrites(ctx, *objects)
+
+    await ctx.guild.create_voice_channel(
+        name,
+        overwrites=overwrites,
+        reason='Very secret business.',
+    )
+
+
+@secret.command()
+@commands.guild_only()
+async def emoji(ctx: commands.Context, emoji: discord.PartialEmoji, *roles: discord.Role):
+    """This clones a specified emoji that only specified roles
+    are allowed to use.
+    """
+
+    # fetch the emoji asset and read it as bytes.
+    emoji_bytes = await emoji.read()
+
+    # the key parameter here is `roles`, which controls
+    # what roles are able to use the emoji.
+    await ctx.guild.create_custom_emoji(
+        name=emoji.name,
+        image=emoji_bytes,
+        roles=roles,
+        reason='Very secret business.',
+    )
+
+
+bot.run('token')
